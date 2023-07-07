@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_Oracle_name": {
+            "value": null
+        },
+        "disks_Oracle_OsDisk_1_d16ca9fe19f84e5aa5dd9d91b0f8495a_externalid": {
+            "value": null
+        },
+        "networkInterfaces_oracle588_externalid": {
+            "value": null
+        }
+    }
+}

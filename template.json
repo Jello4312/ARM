@@ -1,0 +1,84 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_Oracle_name": {
+            "defaultValue": "Oracle",
+            "type": "String"
+        },
+        "disks_Oracle_OsDisk_1_d16ca9fe19f84e5aa5dd9d91b0f8495a_externalid": {
+            "defaultValue": "/subscriptions/083c772b-da28-44ec-b84c-c904cdbd9d8d/resourceGroups/DEMOLAB/providers/Microsoft.Compute/disks/Oracle_OsDisk_1_d16ca9fe19f84e5aa5dd9d91b0f8495a",
+            "type": "String"
+        },
+        "networkInterfaces_oracle588_externalid": {
+            "defaultValue": "/subscriptions/083c772b-da28-44ec-b84c-c904cdbd9d8d/resourceGroups/DemoLab/providers/Microsoft.Network/networkInterfaces/oracle588",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2023-03-01",
+            "name": "[parameters('virtualMachines_Oracle_name')]",
+            "location": "eastus",
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_B1ls"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "[parameters('virtualMachines_Oracle_name')]",
+                        "offer": "[concat(parameters('virtualMachines_Oracle_name'), '-Linux')]",
+                        "sku": "ol79",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(parameters('virtualMachines_Oracle_name'), '_OsDisk_1_d16ca9fe19f84e5aa5dd9d91b0f8495a')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS",
+                            "id": "[parameters('disks_Oracle_OsDisk_1_d16ca9fe19f84e5aa5dd9d91b0f8495a_externalid')]"
+                        },
+                        "deleteOption": "Delete",
+                        "diskSizeGB": 30
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_Oracle_name')]",
+                    "adminUsername": "azureuser",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": false,
+                        "provisionVMAgent": true,
+                        "patchSettings": {
+                            "patchMode": "ImageDefault",
+                            "assessmentMode": "ImageDefault"
+                        },
+                        "enableVMAgentPlatformUpdates": false
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[parameters('networkInterfaces_oracle588_externalid')]",
+                            "properties": {
+                                "deleteOption": "Detach"
+                            }
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true
+                    }
+                }
+            }
+        }
+    ]
+}
